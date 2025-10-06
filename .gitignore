@@ -1,0 +1,27 @@
+# Node
+node_modules/
+dist/
+build/
+.tmp/
+.pnpm-store/
+
+# Env & secrets
+.env
+.env.*
+
+# Logs & coverage
+*.log
+coverage/
+
+# Editors & OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Corepack/fnm caches created locally
+.corepack/
+.fnm/
+
+# FNM multishell links
+.fnm_multishells/
