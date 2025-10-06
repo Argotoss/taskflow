@@ -7,10 +7,10 @@ import { AppService } from './app.service';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true
-    })
+      isGlobal: true,
+    }),
   ],
   controllers: [AppController],
-  providers: [AppService, Logger]
+  providers: [AppService, Logger],
 })
 export class AppModule {}

@@ -39,9 +39,11 @@ module.exports = {
     'jsdoc/require-returns-description': 'off',
     'jsdoc/require-param-type': 'off',
     'jsdoc/require-returns-type': 'off',
+    'jsdoc/require-jsdoc': 'off',
     'prettier/prettier': 'error',
     'unicorn/filename-case': 'off',
     'unicorn/prevent-abbreviations': 'off',
+    'unicorn/prefer-top-level-await': 'off',
     '@typescript-eslint/no-unused-vars': [
       'error',
       { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }

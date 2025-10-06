@@ -5,11 +5,11 @@ const config: Config = {
   rootDir: '.',
   testRegex: '.*\\.(spec|test)\\.ts$',
   transform: {
-    '^.+\\.(t|j)s$': ['ts-jest', { tsconfig: './tsconfig.json' }]
+    '^.+\\.(t|j)s$': ['ts-jest', { tsconfig: './tsconfig.json' }],
   },
   coverageDirectory: '../../coverage/backend/unit',
   testEnvironment: 'node',
-  setupFilesAfterEnv: ['<rootDir>/test/setup.ts']
+  setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],
 };
 
 export default config;
