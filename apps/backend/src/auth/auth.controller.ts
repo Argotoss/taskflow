@@ -1,4 +1,14 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Request,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 
 import { AuthService } from './auth.service';
@@ -6,10 +16,21 @@ import { AuthResponseDto } from './dto/auth-response.dto';
 import { LoginRequestDto } from './dto/login-request.dto';
 import { RefreshTokenRequestDto } from './dto/refresh-token-request.dto';
 import { RegisterRequestDto } from './dto/register-request.dto';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { PublicUser, UsersService } from '../users/users.service';
+
+export type AuthenticatedRequest = {
+  user: {
+    userId: string;
+  };
+};
 
 @Controller({ path: 'auth' })
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @Post('register')
   async register(@Body() payload: RegisterRequestDto): Promise<AuthResponseDto> {
@@ -29,5 +50,18 @@ export class AuthController {
   async refresh(@Body() payload: RefreshTokenRequestDto): Promise<AuthResponseDto> {
     const response = await this.authService.refresh(payload);
     return plainToInstance(AuthResponseDto, response, { excludeExtraneousValues: true });
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  async me(@Request() req: AuthenticatedRequest): Promise<PublicUser> {
+    const userId = req.user.userId;
+    const user = await this.usersService.findById(userId);
+
+    if (!user) {
+      throw new UnauthorizedException('Authenticated user not found');
+    }
+
+    return this.usersService.toPublicUser(user);
   }
 }
