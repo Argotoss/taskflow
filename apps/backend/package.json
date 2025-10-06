@@ -8,6 +8,7 @@
     "start:dev": "pnpm exec nest start --watch",
     "start:debug": "pnpm exec nest start --debug --watch",
     "build": "pnpm exec nest build",
+    "typecheck": "pnpm exec tsc --noEmit",
     "lint": "pnpm exec eslint \"{src,test}/**/*.ts\" --max-warnings=0",
     "test": "pnpm exec jest",
     "test:watch": "pnpm exec jest --watch",

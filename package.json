@@ -10,8 +10,11 @@
     "prepare": "husky install",
     "lint": "pnpm -r lint",
     "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
     "build": "pnpm -r build",
     "dev:backend": "pnpm --filter backend start:dev",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "test:frontend": "pnpm --filter frontend test",
     "test:backend:e2e": "pnpm --filter backend test:e2e"
   },
   "devDependencies": {
