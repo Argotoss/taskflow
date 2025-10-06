@@ -12,6 +12,7 @@ build/
 # Logs & coverage
 *.log
 coverage/
+**/coverage/
 
 # Editors & OS
 .idea/
