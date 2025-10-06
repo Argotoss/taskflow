@@ -8,6 +8,8 @@ describe('AppController (e2e)', () => {
   let app: Awaited<ReturnType<TestingModule['createNestApplication']>>;
 
   beforeAll(async () => {
+    delete process.env.DATABASE_URL;
+
     const moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
