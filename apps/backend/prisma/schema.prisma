@@ -1,0 +1,209 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ProjectStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+enum MembershipRole {
+  OWNER
+  ADMIN
+  CONTRIBUTOR
+  VIEWER
+}
+
+enum TaskStatus {
+  BACKLOG
+  IN_PROGRESS
+  IN_REVIEW
+  BLOCKED
+  DONE
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum ActivityType {
+  TASK_CREATED
+  TASK_UPDATED
+  STATUS_CHANGED
+  ASSIGNEE_CHANGED
+  COMMENT_ADDED
+  COMMENT_UPDATED
+  ATTACHMENT_ADDED
+}
+
+enum NotificationType {
+  TASK_ASSIGNED
+  TASK_UPDATED
+  COMMENT_MENTION
+  PROJECT_INVITE
+}
+
+model User {
+  id             String          @id @default(uuid())
+  email          String          @unique
+  passwordHash   String
+  displayName    String
+  profileColor   String?         @db.VarChar(12)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  memberships    Membership[]
+  invitesSent    Membership[]   @relation("MembershipInvitedBy")
+  projectsOwned  Project[]       @relation("ProjectOwner")
+  tasksCreated   Task[]          @relation("TaskCreatedBy")
+  taskActivities TaskActivity[]
+  comments       Comment[]
+  attachments    Attachment[]
+  notifications  Notification[]
+  authTokens     AuthToken[]
+}
+
+model Project {
+  id           String         @id @default(uuid())
+  name         String
+  description  String?
+  status       ProjectStatus  @default(ACTIVE)
+  ownerId      String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  archivedAt   DateTime?
+  owner        User           @relation("ProjectOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  memberships  Membership[]
+  tasks        Task[]
+  integrations IntegrationSettings?
+
+  @@index([ownerId])
+}
+
+model Membership {
+  id          String         @id @default(uuid())
+  userId      String
+  projectId   String
+  role        MembershipRole @default(CONTRIBUTOR)
+  joinedAt    DateTime       @default(now())
+  invitedById String?
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project     Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  invitedBy   User?          @relation("MembershipInvitedBy", fields: [invitedById], references: [id])
+  assignedTasks Task[]       @relation("TaskAssignee")
+
+  @@unique([userId, projectId])
+  @@index([projectId])
+}
+
+model Task {
+  id           String        @id @default(uuid())
+  projectId    String
+  createdById  String
+  assigneeId   String?
+  title        String
+  description  String?
+  priority     TaskPriority  @default(MEDIUM)
+  status       TaskStatus    @default(BACKLOG)
+  dueAt        DateTime?
+  position     Int           @default(0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  completedAt  DateTime?
+  project      Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdBy    User          @relation("TaskCreatedBy", fields: [createdById], references: [id])
+  assignee     Membership?   @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  activities   TaskActivity[]
+  comments     Comment[]
+  attachments  Attachment[]
+
+  @@index([projectId])
+  @@index([assigneeId])
+  @@index([status])
+}
+
+model TaskActivity {
+  id        String       @id @default(uuid())
+  taskId    String
+  actorId   String
+  type      ActivityType
+  payload   Json
+  createdAt DateTime     @default(now())
+  task      Task         @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  actor     User         @relation(fields: [actorId], references: [id])
+
+  @@index([taskId])
+}
+
+model Comment {
+  id        String    @id @default(uuid())
+  taskId    String
+  authorId  String
+  body      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  editedAt  DateTime?
+  deletedAt DateTime?
+  task      Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  author    User      @relation(fields: [authorId], references: [id])
+
+  @@index([taskId])
+}
+
+model Attachment {
+  id          String   @id @default(uuid())
+  taskId      String
+  uploaderId  String
+  fileName    String
+  fileSize    Int
+  contentType String
+  s3Key       String
+  createdAt   DateTime @default(now())
+  task        Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  uploader    User     @relation(fields: [uploaderId], references: [id])
+
+  @@index([taskId])
+}
+
+model Notification {
+  id        String            @id @default(uuid())
+  userId    String
+  type      NotificationType
+  payload   Json
+  readAt    DateTime?
+  createdAt DateTime          @default(now())
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model AuthToken {
+  id               String   @id @default(uuid())
+  userId           String
+  refreshTokenHash String
+  expiresAt        DateTime
+  createdAt        DateTime @default(now())
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model IntegrationSettings {
+  id            String   @id @default(uuid())
+  projectId     String   @unique
+  aiEnabled     Boolean  @default(false)
+  aiProvider    String?
+  aiModel       String?
+  aiApiKeyEncrypted String?
+  createdAt     DateTime @default(now())
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
