@@ -1,13 +1,23 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { AppLayout } from '../components/AppLayout';
 import { useProjectsQuery } from '../features/projects';
+import { CreateProjectModal } from '../features/projects/components/CreateProjectModal';
 
 export const ProjectsPage = (): JSX.Element => {
   const { data: projects, isLoading, isError } = useProjectsQuery();
+  const [isCreateModalOpen, setCreateModalOpen] = useState(false);
 
   return (
-    <AppLayout title="Projects">
+    <AppLayout
+      title="Projects"
+      actions={
+        <button type="button" className="primary-button" onClick={() => setCreateModalOpen(true)}>
+          + New project
+        </button>
+      }
+    >
       {isLoading ? (
         <div className="panel muted">Loading projects…</div>
       ) : isError ? (
@@ -41,6 +51,8 @@ export const ProjectsPage = (): JSX.Element => {
           ))}
         </ul>
       )}
+
+      {isCreateModalOpen ? <CreateProjectModal onClose={() => setCreateModalOpen(false)} /> : null}
     </AppLayout>
   );
 };

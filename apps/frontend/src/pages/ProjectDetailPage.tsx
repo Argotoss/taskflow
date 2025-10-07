@@ -1,10 +1,11 @@
 import { taskStatusValues } from '@taskflow/shared';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { AppLayout } from '../components/AppLayout';
 import { useProjectQuery } from '../features/projects';
 import { useProjectTasksQuery } from '../features/tasks';
+import { CreateTaskModal } from '../features/tasks/components/CreateTaskModal';
 
 export const ProjectDetailPage = (): JSX.Element => {
   const { projectId } = useParams();
@@ -18,6 +19,8 @@ export const ProjectDetailPage = (): JSX.Element => {
     isLoading: tasksLoading,
     isError: tasksError,
   } = useProjectTasksQuery(projectId);
+
+  const [isCreateTaskOpen, setCreateTaskOpen] = useState(false);
 
   const groupedTasks = useMemo(() => {
     const items = tasks ?? [];
@@ -48,9 +51,19 @@ export const ProjectDetailPage = (): JSX.Element => {
     <AppLayout
       title={project ? project.name : 'Project'}
       actions={
-        <Link to="/projects" className="link-button">
-          Back to projects
-        </Link>
+        <div className="actions-inline">
+          <Link to="/projects" className="link-button">
+            Back to projects
+          </Link>
+          <button
+            type="button"
+            className="primary-button"
+            onClick={() => setCreateTaskOpen(true)}
+            disabled={!projectId}
+          >
+            + New task
+          </button>
+        </div>
       }
     >
       {project ? (
@@ -113,6 +126,10 @@ export const ProjectDetailPage = (): JSX.Element => {
           </div>
         )}
       </section>
+
+      {isCreateTaskOpen && projectId ? (
+        <CreateTaskModal projectId={projectId} onClose={() => setCreateTaskOpen(false)} />
+      ) : null}
     </AppLayout>
   );
 };

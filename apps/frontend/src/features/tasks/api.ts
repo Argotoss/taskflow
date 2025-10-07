@@ -59,13 +59,9 @@ export const useCreateTaskMutation = (projectId: string) => {
       ),
     onSuccess: (task: Task) => {
       queryClient.invalidateQueries({ queryKey: tasksQueryKey(projectId) });
-      queryClient.setQueryData(tasksQueryKey(projectId), (prev?: Task[]) => {
-        if (!prev) {
-          return prev;
-        }
-
-        return prev.some((item) => item.id === task.id) ? prev : [task, ...prev];
-      });
+      queryClient.setQueryData(tasksQueryKey(projectId), (prev?: Task[]) =>
+        prev ? [task, ...prev.filter((item) => item.id !== task.id)] : prev,
+      );
     },
   });
 };
