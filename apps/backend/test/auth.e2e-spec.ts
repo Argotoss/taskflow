@@ -9,6 +9,7 @@ import { AuthService } from '../src/auth/auth.service';
 import { AuthResponseDto } from '../src/auth/dto/auth-response.dto';
 import { JwtAuthGuard } from '../src/auth/guards/jwt-auth.guard';
 import { AuthenticatedRequest } from '../src/common/types/authenticated-request';
+import { PrismaService } from '../src/prisma/prisma.service';
 import { PublicUser, UsersService } from '../src/users/users.service';
 
 const mockTokens: AuthResponseDto = {
@@ -68,6 +69,8 @@ describe('AuthModule (e2e)', () => {
       .useValue(authService)
       .overrideProvider(UsersService)
       .useValue(usersService)
+      .overrideProvider(PrismaService)
+      .useValue({})
       .overrideGuard(JwtAuthGuard)
       .useValue({
         canActivate: (context: ExecutionContext) => {
