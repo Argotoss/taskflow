@@ -1,24 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
-import { projectSchema } from '@taskflow/shared';
 import { Link } from 'react-router-dom';
-import { z } from 'zod';
 
 import { AppLayout } from '../components/AppLayout';
-import { useAuth } from '../features/auth';
-
-const projectsSchema = z.array(projectSchema);
+import { useProjectsQuery } from '../features/projects';
 
 export const ProjectsPage = (): JSX.Element => {
-  const { request } = useAuth();
-
-  const {
-    data: projects,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['projects'],
-    queryFn: () => request({ method: 'GET', url: '/projects' }, projectsSchema),
-  });
+  const { data: projects, isLoading, isError } = useProjectsQuery();
 
   return (
     <AppLayout title="Projects">

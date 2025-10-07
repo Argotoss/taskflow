@@ -66,6 +66,20 @@ export const membershipSchema = z.object({
   user: userSummarySchema,
 });
 
+export const createProjectRequestSchema = z.object({
+  name: z.string().min(1),
+  description: z.string().max(1000).optional(),
+});
+
+export const addMemberRequestSchema = z.object({
+  email: z.string().email(),
+  role: z.enum(membershipRoleValues).optional(),
+});
+
+export const updateMemberRoleRequestSchema = z.object({
+  role: z.enum(membershipRoleValues),
+});
+
 export const taskAssigneeSchema = z.object({
   id: z.string().uuid(),
   projectId: z.string().uuid(),
@@ -92,6 +106,16 @@ export const taskSchema = z.object({
   assignee: taskAssigneeSchema.nullable().optional(),
 });
 
+export const createTaskRequestSchema = z.object({
+  title: z.string().min(1).max(240),
+  description: z.string().max(5000).optional(),
+  priority: z.enum(taskPriorityValues).optional(),
+  status: z.enum(taskStatusValues).optional(),
+  assigneeId: z.string().uuid().nullable().optional(),
+  position: z.number().int().optional(),
+  dueAt: z.coerce.date().nullable().optional(),
+});
+
 export type UserSummary = z.infer<typeof userSummarySchema>;
 export type AuthResponse = z.infer<typeof authResponseSchema>;
 export type Project = z.infer<typeof projectSchema>;
@@ -100,5 +124,9 @@ export type Task = z.infer<typeof taskSchema>;
 export type LoginRequest = z.infer<typeof loginRequestSchema>;
 export type RegisterRequest = z.infer<typeof registerRequestSchema>;
 export type RefreshTokenRequest = z.infer<typeof refreshTokenRequestSchema>;
+export type CreateProjectRequest = z.infer<typeof createProjectRequestSchema>;
+export type AddMemberRequest = z.infer<typeof addMemberRequestSchema>;
+export type UpdateMemberRoleRequest = z.infer<typeof updateMemberRoleRequestSchema>;
+export type CreateTaskRequest = z.infer<typeof createTaskRequestSchema>;
 
 export const PASSWORD_REGEX = passwordRegex;

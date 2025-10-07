@@ -1,32 +1,26 @@
-import { useQuery } from '@tanstack/react-query';
-import { projectSchema, taskSchema, taskStatusValues } from '@taskflow/shared';
+import { taskStatusValues } from '@taskflow/shared';
 import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { z } from 'zod';
 
 import { AppLayout } from '../components/AppLayout';
-import { useAuth } from '../features/auth';
-
-const tasksSchema = z.array(taskSchema);
+import { useProjectQuery } from '../features/projects';
+import { useProjectTasksQuery } from '../features/tasks';
 
 export const ProjectDetailPage = (): JSX.Element => {
   const { projectId } = useParams();
-  const { request } = useAuth();
-
-  const projectQuery = useQuery({
-    queryKey: ['project', projectId],
-    enabled: Boolean(projectId),
-    queryFn: () => request({ method: 'GET', url: `/projects/${projectId}` }, projectSchema),
-  });
-
-  const tasksQuery = useQuery({
-    queryKey: ['project', projectId, 'tasks'],
-    enabled: Boolean(projectId),
-    queryFn: () => request({ method: 'GET', url: `/projects/${projectId}/tasks` }, tasksSchema),
-  });
+  const {
+    data: project,
+    isLoading: projectLoading,
+    isError: projectError,
+  } = useProjectQuery(projectId);
+  const {
+    data: tasks,
+    isLoading: tasksLoading,
+    isError: tasksError,
+  } = useProjectTasksQuery(projectId);
 
   const groupedTasks = useMemo(() => {
-    const items = tasksQuery.data ?? [];
+    const items = tasks ?? [];
     const result = new Map<string, typeof items>();
 
     for (const status of taskStatusValues) {
@@ -40,7 +34,7 @@ export const ProjectDetailPage = (): JSX.Element => {
     }
 
     return result;
-  }, [tasksQuery.data]);
+  }, [tasks]);
 
   if (!projectId) {
     return (
@@ -49,8 +43,6 @@ export const ProjectDetailPage = (): JSX.Element => {
       </AppLayout>
     );
   }
-
-  const project = projectQuery.data;
 
   return (
     <AppLayout
@@ -73,16 +65,16 @@ export const ProjectDetailPage = (): JSX.Element => {
             <span>Status: {project.status.replace('_', ' ').toLowerCase()}</span>
           </div>
         </section>
-      ) : projectQuery.isLoading ? (
+      ) : projectLoading ? (
         <div className="panel muted">Loading project…</div>
-      ) : projectQuery.isError ? (
+      ) : projectError ? (
         <div className="panel error">Unable to load project details.</div>
       ) : null}
 
       <section className="task-board">
-        {tasksQuery.isLoading ? (
+        {tasksLoading ? (
           <div className="panel muted">Loading tasks…</div>
-        ) : tasksQuery.isError ? (
+        ) : tasksError ? (
           <div className="panel error">Unable to load tasks right now.</div>
         ) : (
           <div className="task-columns">
