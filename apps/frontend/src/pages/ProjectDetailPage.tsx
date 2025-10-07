@@ -4,8 +4,10 @@ import { Link, useParams } from 'react-router-dom';
 
 import { AppLayout } from '../components/AppLayout';
 import { useProjectQuery } from '../features/projects';
+import { EditProjectModal } from '../features/projects/components/EditProjectModal';
 import { useProjectTasksQuery } from '../features/tasks';
 import { CreateTaskModal } from '../features/tasks/components/CreateTaskModal';
+import { EditTaskModal } from '../features/tasks/components/EditTaskModal';
 
 export const ProjectDetailPage = (): JSX.Element => {
   const { projectId } = useParams();
@@ -21,6 +23,8 @@ export const ProjectDetailPage = (): JSX.Element => {
   } = useProjectTasksQuery(projectId);
 
   const [isCreateTaskOpen, setCreateTaskOpen] = useState(false);
+  const [isEditProjectOpen, setEditProjectOpen] = useState(false);
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
 
   const groupedTasks = useMemo(() => {
     const items = tasks ?? [];
@@ -55,6 +59,15 @@ export const ProjectDetailPage = (): JSX.Element => {
           <Link to="/projects" className="link-button">
             Back to projects
           </Link>
+          {project ? (
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={() => setEditProjectOpen(true)}
+            >
+              Edit project
+            </button>
+          ) : null}
           <button
             type="button"
             className="primary-button"
@@ -107,15 +120,25 @@ export const ProjectDetailPage = (): JSX.Element => {
                         .slice()
                         .sort((a, b) => a.position - b.position)
                         .map((task) => (
-                          <li key={task.id} className="task-card">
-                            <h3>{task.title}</h3>
-                            {task.description ? <p>{task.description}</p> : null}
-                            <footer>
-                              <span className={`priority priority-${task.priority.toLowerCase()}`}>
-                                {task.priority.toLowerCase()}
-                              </span>
-                              <span className="muted">Created by {task.createdBy.displayName}</span>
-                            </footer>
+                          <li key={task.id}>
+                            <button
+                              type="button"
+                              className="task-card"
+                              onClick={() => setSelectedTaskId(task.id)}
+                            >
+                              <h3>{task.title}</h3>
+                              {task.description ? <p>{task.description}</p> : null}
+                              <footer>
+                                <span
+                                  className={`priority priority-${task.priority.toLowerCase()}`}
+                                >
+                                  {task.priority.toLowerCase()}
+                                </span>
+                                <span className="muted">
+                                  Created by {task.createdBy.displayName}
+                                </span>
+                              </footer>
+                            </button>
                           </li>
                         ))
                     )}
@@ -127,8 +150,18 @@ export const ProjectDetailPage = (): JSX.Element => {
         )}
       </section>
 
+      {isEditProjectOpen && project ? (
+        <EditProjectModal project={project} onClose={() => setEditProjectOpen(false)} />
+      ) : null}
       {isCreateTaskOpen && projectId ? (
         <CreateTaskModal projectId={projectId} onClose={() => setCreateTaskOpen(false)} />
+      ) : null}
+      {selectedTaskId && projectId && tasks ? (
+        <EditTaskModal
+          projectId={projectId}
+          task={tasks.find((item) => item.id === selectedTaskId)!}
+          onClose={() => setSelectedTaskId(null)}
+        />
       ) : null}
     </AppLayout>
   );

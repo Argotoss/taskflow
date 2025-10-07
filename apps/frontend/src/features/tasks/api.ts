@@ -3,8 +3,10 @@ import {
   CreateTaskRequest,
   Task,
   TaskStatus,
+  UpdateTaskRequest,
   createTaskRequestSchema,
   taskSchema,
+  updateTaskRequestSchema,
 } from '@taskflow/shared';
 import { z } from 'zod';
 
@@ -61,6 +63,29 @@ export const useCreateTaskMutation = (projectId: string) => {
       queryClient.invalidateQueries({ queryKey: tasksQueryKey(projectId) });
       queryClient.setQueryData(tasksQueryKey(projectId), (prev?: Task[]) =>
         prev ? [task, ...prev.filter((item) => item.id !== task.id)] : prev,
+      );
+    },
+  });
+};
+
+export const useUpdateTaskMutation = (projectId: string, taskId: string) => {
+  const { request } = useAuth();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (payload: UpdateTaskRequest) =>
+      request(
+        {
+          method: 'PATCH',
+          url: `/projects/${projectId}/tasks/${taskId}`,
+          data: updateTaskRequestSchema.parse(payload),
+        },
+        taskSchema,
+      ),
+    onSuccess: (task: Task) => {
+      queryClient.invalidateQueries({ queryKey: tasksQueryKey(projectId) });
+      queryClient.setQueryData(tasksQueryKey(projectId), (prev?: Task[]) =>
+        prev ? prev.map((item) => (item.id === task.id ? task : item)) : prev,
       );
     },
   });

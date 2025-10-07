@@ -3,8 +3,10 @@ import {
   CreateProjectRequest,
   Project,
   ProjectStatus,
+  UpdateProjectRequest,
   createProjectRequestSchema,
   projectSchema,
+  updateProjectRequestSchema,
 } from '@taskflow/shared';
 import { z } from 'zod';
 
@@ -64,6 +66,27 @@ export const useCreateProjectMutation = () => {
           method: 'POST',
           url: '/projects',
           data: createProjectRequestSchema.parse(payload),
+        },
+        projectSchema,
+      ),
+    onSuccess: (project: Project) => {
+      queryClient.invalidateQueries({ queryKey: projectsQueryKey() });
+      queryClient.setQueryData(projectQueryKey(project.id), project);
+    },
+  });
+};
+
+export const useUpdateProjectMutation = (projectId: string) => {
+  const { request } = useAuth();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (payload: UpdateProjectRequest) =>
+      request(
+        {
+          method: 'PATCH',
+          url: `/projects/${projectId}`,
+          data: updateProjectRequestSchema.parse(payload),
         },
         projectSchema,
       ),

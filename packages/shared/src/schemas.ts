@@ -71,6 +71,10 @@ export const createProjectRequestSchema = z.object({
   description: z.string().max(1000).optional(),
 });
 
+export const updateProjectRequestSchema = createProjectRequestSchema.partial().extend({
+  status: z.enum(projectStatusValues).optional(),
+});
+
 export const addMemberRequestSchema = z.object({
   email: z.string().email(),
   role: z.enum(membershipRoleValues).optional(),
@@ -116,6 +120,8 @@ export const createTaskRequestSchema = z.object({
   dueAt: z.coerce.date().nullable().optional(),
 });
 
+export const updateTaskRequestSchema = createTaskRequestSchema.partial();
+
 export type UserSummary = z.infer<typeof userSummarySchema>;
 export type AuthResponse = z.infer<typeof authResponseSchema>;
 export type Project = z.infer<typeof projectSchema>;
@@ -125,8 +131,10 @@ export type LoginRequest = z.infer<typeof loginRequestSchema>;
 export type RegisterRequest = z.infer<typeof registerRequestSchema>;
 export type RefreshTokenRequest = z.infer<typeof refreshTokenRequestSchema>;
 export type CreateProjectRequest = z.infer<typeof createProjectRequestSchema>;
+export type UpdateProjectRequest = z.infer<typeof updateProjectRequestSchema>;
 export type AddMemberRequest = z.infer<typeof addMemberRequestSchema>;
 export type UpdateMemberRoleRequest = z.infer<typeof updateMemberRoleRequestSchema>;
 export type CreateTaskRequest = z.infer<typeof createTaskRequestSchema>;
+export type UpdateTaskRequest = z.infer<typeof updateTaskRequestSchema>;
 
 export const PASSWORD_REGEX = passwordRegex;
