@@ -1,11 +1,11 @@
-import { taskStatusValues } from '@taskflow/shared';
-import { useMemo, useState } from 'react';
+import { TaskStatus, taskStatusValues } from '@taskflow/shared';
+import { DragEvent, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { AppLayout } from '../components/AppLayout';
 import { useProjectQuery } from '../features/projects';
 import { EditProjectModal } from '../features/projects/components/EditProjectModal';
-import { useProjectTasksQuery } from '../features/tasks';
+import { useProjectTasksQuery, useUpdateTaskMutation } from '../features/tasks';
 import { CreateTaskModal } from '../features/tasks/components/CreateTaskModal';
 import { EditTaskModal } from '../features/tasks/components/EditTaskModal';
 
@@ -25,6 +25,10 @@ export const ProjectDetailPage = (): JSX.Element => {
   const [isCreateTaskOpen, setCreateTaskOpen] = useState(false);
   const [isEditProjectOpen, setEditProjectOpen] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+  const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null);
+  const [dragOverStatus, setDragOverStatus] = useState<TaskStatus | null>(null);
+
+  const updateTaskMutation = useUpdateTaskMutation(projectId ?? '');
 
   const groupedTasks = useMemo(() => {
     const items = tasks ?? [];
@@ -115,7 +119,35 @@ export const ProjectDetailPage = (): JSX.Element => {
             {taskStatusValues.map((status) => {
               const tasks = groupedTasks.get(status) ?? [];
               return (
-                <article key={status} className="task-column">
+                <article
+                  key={status}
+                  className={`task-column ${dragOverStatus === status ? 'task-column--active' : ''}`}
+                  onDragOver={(event: DragEvent<HTMLDivElement>) => {
+                    event.preventDefault();
+                    setDragOverStatus(status);
+                  }}
+                  onDragLeave={() =>
+                    setDragOverStatus((current) => (current === status ? null : current))
+                  }
+                  onDrop={async () => {
+                    if (!projectId || !draggedTaskId) {
+                      return;
+                    }
+
+                    const filtered = tasks.filter((item) => item.id !== draggedTaskId);
+                    const newPosition = filtered.length;
+
+                    setDragOverStatus(null);
+                    await updateTaskMutation.mutateAsync({
+                      taskId: draggedTaskId,
+                      input: {
+                        status,
+                        position: newPosition,
+                      },
+                    });
+                    setDraggedTaskId(null);
+                  }}
+                >
                   <header>
                     <h2>{status.replace('_', ' ').toLowerCase()}</h2>
                     <span className="chip">{tasks.length}</span>
@@ -131,7 +163,15 @@ export const ProjectDetailPage = (): JSX.Element => {
                           <li key={task.id}>
                             <button
                               type="button"
-                              className={`task-card task-card--${task.status.toLowerCase()}`}
+                              className={`task-card task-card--${task.status.toLowerCase()} ${
+                                draggedTaskId === task.id ? 'task-card--dragging' : ''
+                              }`}
+                              draggable
+                              onDragStart={() => setDraggedTaskId(task.id)}
+                              onDragEnd={() => {
+                                setDraggedTaskId(null);
+                                setDragOverStatus(null);
+                              }}
                               onClick={() => setSelectedTaskId(task.id)}
                             >
                               <h3>{task.title}</h3>

@@ -27,7 +27,7 @@ type EditTaskModalProps = {
 export const EditTaskModal = ({ projectId, task, onClose }: EditTaskModalProps): JSX.Element => {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const membershipsQuery = useMembershipsQuery(projectId);
-  const mutation = useUpdateTaskMutation(projectId, task.id);
+  const mutation = useUpdateTaskMutation(projectId);
 
   const members = useMemo(() => membershipsQuery.data ?? [], [membershipsQuery.data]);
 
@@ -58,7 +58,7 @@ export const EditTaskModal = ({ projectId, task, onClose }: EditTaskModalProps):
         assigneeId: values.assigneeId ?? undefined,
         dueAt: values.dueAt ? new Date(values.dueAt) : undefined,
       };
-      await mutation.mutateAsync(payload);
+      await mutation.mutateAsync({ taskId: task.id, input: payload });
       onClose();
     } catch (error) {
       console.error(error);

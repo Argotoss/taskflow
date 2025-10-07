@@ -576,6 +576,11 @@
   background: rgba(16, 185, 129, 0.85);
 }
 
+.task-card--dragging {
+  opacity: 0.65;
+  transform: scale(0.98);
+}
+
 .task-card h3 {
   font-size: 1rem;
   font-weight: 600;
@@ -589,6 +594,12 @@
 
 .task-column li {
   list-style: none;
+}
+
+.task-column--active {
+  background: rgba(59, 130, 246, 0.08);
+  border-radius: 1rem;
+  transition: background 0.2s ease;
 }
 
 .task-card h3 {

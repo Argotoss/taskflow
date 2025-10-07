@@ -68,17 +68,17 @@ export const useCreateTaskMutation = (projectId: string) => {
   });
 };
 
-export const useUpdateTaskMutation = (projectId: string, taskId: string) => {
+export const useUpdateTaskMutation = (projectId: string) => {
   const { request } = useAuth();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (payload: UpdateTaskRequest) =>
+    mutationFn: async ({ taskId, input }: { taskId: string; input: UpdateTaskRequest }) =>
       request(
         {
           method: 'PATCH',
           url: `/projects/${projectId}/tasks/${taskId}`,
-          data: updateTaskRequestSchema.parse(payload),
+          data: updateTaskRequestSchema.parse(input),
         },
         taskSchema,
       ),
