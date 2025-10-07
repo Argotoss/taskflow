@@ -123,7 +123,7 @@ export const ProjectDetailPage = (): JSX.Element => {
                           <li key={task.id}>
                             <button
                               type="button"
-                              className="task-card"
+                              className={`task-card task-card--${task.status.toLowerCase()}`}
                               onClick={() => setSelectedTaskId(task.id)}
                             >
                               <h3>{task.title}</h3>
