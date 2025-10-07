@@ -17,13 +17,8 @@ import { LoginRequestDto } from './dto/login-request.dto';
 import { RefreshTokenRequestDto } from './dto/refresh-token-request.dto';
 import { RegisterRequestDto } from './dto/register-request.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { AuthenticatedRequest } from '../common/types/authenticated-request';
 import { PublicUser, UsersService } from '../users/users.service';
-
-export type AuthenticatedRequest = {
-  user: {
-    userId: string;
-  };
-};
 
 @Controller({ path: 'auth' })
 export class AuthController {

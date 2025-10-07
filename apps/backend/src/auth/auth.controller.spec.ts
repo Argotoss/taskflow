@@ -1,7 +1,8 @@
 import { UnauthorizedException } from '@nestjs/common';
 
-import { AuthController, AuthenticatedRequest } from './auth.controller';
+import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { AuthenticatedRequest } from '../common/types/authenticated-request';
 import { UsersService, PublicUser } from '../users/users.service';
 
 describe('AuthController', () => {
@@ -47,7 +48,7 @@ describe('AuthController', () => {
     (usersService.findById as jest.Mock).mockResolvedValue(user);
     (usersService.toPublicUser as jest.Mock).mockReturnValue(publicUser);
 
-    const request: AuthenticatedRequest = { user: { userId } };
+    const request = { user: { userId } } as AuthenticatedRequest;
     const result = await controller.me(request);
 
     expect(result).toEqual(publicUser);
@@ -57,7 +58,7 @@ describe('AuthController', () => {
   it('throws when user cannot be resolved', async () => {
     (usersService.findById as jest.Mock).mockResolvedValue(null);
 
-    const request: AuthenticatedRequest = { user: { userId: 'missing' } };
+    const request = { user: { userId: 'missing' } } as AuthenticatedRequest;
 
     await expect(controller.me(request)).rejects.toBeInstanceOf(UnauthorizedException);
   });

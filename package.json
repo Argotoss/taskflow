@@ -16,6 +16,7 @@
     "db:generate": "pnpm --filter backend exec prisma generate",
     "db:migrate": "pnpm --filter backend exec prisma migrate dev",
     "db:deploy": "pnpm --filter backend exec prisma migrate deploy",
+    "db:seed": "pnpm --filter backend exec prisma db seed",
     "db:studio": "pnpm --filter backend exec prisma studio",
     "build": "pnpm -r build",
     "dev:backend": "pnpm --filter backend start:dev",

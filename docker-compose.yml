@@ -16,6 +16,26 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  s3:
+    image: docker.io/bitnami/minio:2024.12.3
+    container_name: taskflow_minio
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: taskflow
+      MINIO_ROOT_PASSWORD: taskflow-secret
+      MINIO_DEFAULT_BUCKETS: taskflow-local
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:9000/minio/health/live']
+      interval: 10s
+      timeout: 5s
+      retries: 5
 volumes:
   postgres_data:
+    driver: local
+  minio_data:
     driver: local

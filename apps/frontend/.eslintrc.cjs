@@ -1,52 +1,55 @@
+/* eslint-env node */
+
 module.exports = {
   root: true,
-  parser: '@typescript-eslint/parser',
-  parserOptions: {
-    project: ['./tsconfig.app.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-    ecmaVersion: 'latest',
-    sourceType: 'module'
-  },
   env: {
     browser: true,
-    es2022: true
+    es2021: true,
   },
-  settings: {
-    react: {
-      version: 'detect'
-    }
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: './tsconfig.app.json',
+    tsconfigRootDir: __dirname,
+    ecmaFeatures: {
+      jsx: true,
+    },
   },
-  plugins: ['@typescript-eslint', 'react', 'react-hooks', 'jsx-a11y', 'import', 'prettier'],
+  plugins: ['@typescript-eslint', 'react', 'react-hooks', 'jsx-a11y', 'import'],
   extends: [
     'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
     'plugin:jsx-a11y/recommended',
+    'plugin:@typescript-eslint/recommended',
     'plugin:import/recommended',
     'plugin:import/typescript',
-    'plugin:prettier/recommended'
+    'prettier',
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  settings: {
+    react: {
+      version: 'detect',
+    },
+    'import/resolver': {
+      typescript: {
+        project: ['./tsconfig.app.json', '../../packages/shared/tsconfig.json'],
+        alwaysTryTypes: true,
+      },
+      node: {
+        paths: ['src', '../../packages/shared/src'],
+        extensions: ['.ts', '.tsx'],
+      },
+    },
+  },
   rules: {
-    '@typescript-eslint/no-unused-vars': [
-      'error',
-      { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }
-    ],
     'import/order': [
       'error',
       {
+        groups: [['builtin', 'external'], ['internal'], ['parent', 'sibling', 'index']],
+        'newlines-between': 'always',
         alphabetize: { order: 'asc', caseInsensitive: true },
-        groups: [
-          ['builtin', 'external'],
-          ['internal'],
-          ['parent', 'sibling', 'index']
-        ],
-        'newlines-between': 'always'
-      }
+      },
     ],
-    'prettier/prettier': 'error',
     'react/react-in-jsx-scope': 'off',
-    'react/prop-types': 'off'
-  }
+  },
+  ignorePatterns: ['dist', 'node_modules', '*.d.ts'],
 };

@@ -4,11 +4,11 @@ import { Test } from '@nestjs/testing';
 import { User } from '@prisma/client';
 import request from 'supertest';
 
-import { AuthenticatedRequest } from '../src/auth/auth.controller';
 import { AuthModule } from '../src/auth/auth.module';
 import { AuthService } from '../src/auth/auth.service';
 import { AuthResponseDto } from '../src/auth/dto/auth-response.dto';
 import { JwtAuthGuard } from '../src/auth/guards/jwt-auth.guard';
+import { AuthenticatedRequest } from '../src/common/types/authenticated-request';
 import { PublicUser, UsersService } from '../src/users/users.service';
 
 const mockTokens: AuthResponseDto = {

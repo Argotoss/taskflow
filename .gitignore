@@ -8,6 +8,8 @@ build/
 # Env & secrets
 .env
 .env.*
+!.env.example
+!apps/frontend/.env.example
 
 # Logs & coverage
 *.log

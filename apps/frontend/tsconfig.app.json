@@ -11,7 +11,12 @@
     "resolveJsonModule": true,
     "jsx": "react-jsx",
     "types": ["vite/client"],
-    "noEmit": true
+    "noEmit": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@taskflow/shared": ["../../packages/shared/src/index.ts"],
+      "@taskflow/shared/*": ["../../packages/shared/src/*"]
+    }
   },
   "include": ["src"]
 }
