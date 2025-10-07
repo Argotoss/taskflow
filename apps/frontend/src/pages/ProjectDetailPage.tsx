@@ -81,14 +81,22 @@ export const ProjectDetailPage = (): JSX.Element => {
     >
       {project ? (
         <section className="project-hero">
-          {project.description ? (
-            <p>{project.description}</p>
-          ) : (
-            <p className="muted">No description added yet.</p>
-          )}
-          <div className="project-meta">
-            <span>Role: {project.role}</span>
-            <span>Status: {project.status.replace('_', ' ').toLowerCase()}</span>
+          <div className="project-badge">
+            <div className="project-badge__header">
+              <span className="project-badge__role">{project.role.toLowerCase()}</span>
+              <span
+                className={`project-badge__status project-badge__status--${project.status.toLowerCase()}`}
+              >
+                {project.status.replace('_', ' ').toLowerCase()}
+              </span>
+            </div>
+            <div className="project-badge__body">
+              {project.description ? (
+                <p>{project.description}</p>
+              ) : (
+                <p className="muted">No description added yet.</p>
+              )}
+            </div>
           </div>
         </section>
       ) : projectLoading ? (
