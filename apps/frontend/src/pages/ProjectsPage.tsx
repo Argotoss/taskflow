@@ -31,22 +31,35 @@ export const ProjectsPage = (): JSX.Element => {
         <ul className="project-grid">
           {projects.map((project) => (
             <li key={project.id} className="project-card">
-              <div className="project-card__badge">{project.role.toLowerCase()}</div>
-              <h2>{project.name}</h2>
-              {project.description ? <p>{project.description}</p> : null}
-              <div className="project-card__meta">
-                <span>Status: {project.status.replace('_', ' ').toLowerCase()}</span>
-                <span>
-                  Updated{' '}
-                  {project.updatedAt.toLocaleDateString(undefined, {
-                    month: 'short',
-                    day: 'numeric',
-                  })}
-                </span>
+              <div className="project-card__chip">{project.role.toLowerCase()}</div>
+              <div className="project-card__body">
+                <h2>{project.name}</h2>
+                {project.description ? (
+                  <p>{project.description}</p>
+                ) : (
+                  <p className="muted">No description yet.</p>
+                )}
+                <div className="project-card__meta">
+                  <span className="project-card__meta-label">
+                    Status
+                    <strong>{project.status.replace('_', ' ').toLowerCase()}</strong>
+                  </span>
+                  <span className="project-card__meta-label">
+                    Updated
+                    <strong>
+                      {project.updatedAt.toLocaleDateString(undefined, {
+                        month: 'short',
+                        day: 'numeric',
+                      })}
+                    </strong>
+                  </span>
+                </div>
               </div>
-              <Link to={`/projects/${project.id}`} className="link-button">
-                Open project
-              </Link>
+              <div className="project-card__footer">
+                <Link to={`/projects/${project.id}`} className="project-card__link">
+                  Open project
+                </Link>
+              </div>
             </li>
           ))}
         </ul>

@@ -131,15 +131,25 @@
 }
 
 .page-heading h1 {
-  font-size: 1.9rem;
+  font-size: 2.1rem;
   font-weight: 700;
-  color: #0f172a;
+  color: #0b1220;
+  letter-spacing: -0.01em;
 }
 
 .page-body {
   display: flex;
   flex-direction: column;
   gap: 1.75rem;
+}
+
+.page-heading .badge {
+  background: rgba(37, 99, 235, 0.1);
+  color: #1d4ed8;
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
 .auth-page {
@@ -327,33 +337,86 @@
 }
 
 .project-card {
-  background: white;
-  border-radius: 1.1rem;
+  background: linear-gradient(145deg, #ffffff, #f3f6fb);
+  border-radius: 1.2rem;
   padding: 1.5rem;
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  border: 1px solid rgba(226, 232, 240, 0.7);
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  box-shadow: 0 18px 32px rgba(15, 23, 42, 0.06);
+  gap: 1.1rem;
+  box-shadow: 0 22px 38px rgba(15, 23, 42, 0.08);
 }
 
-.project-card__badge {
+.project-card__chip {
   align-self: flex-start;
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  background: rgba(99, 102, 241, 0.15);
-  color: #3730a3;
-  padding: 0.3rem 0.65rem;
+  background: rgba(99, 102, 241, 0.18);
+  color: #4338ca;
+  padding: 0.3rem 0.75rem;
   border-radius: 999px;
+}
+
+.project-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.project-card__body h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #101830;
+}
+
+.project-card__body p {
+  color: #475569;
+  font-size: 0.95rem;
 }
 
 .project-card__meta {
   display: flex;
-  justify-content: space-between;
-  color: #64748b;
+  gap: 1.25rem;
   font-size: 0.85rem;
+  color: #5b6679;
+}
+
+.project-card__meta-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.project-card__meta-label strong {
+  color: #111827;
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.project-card__footer {
+  margin-top: auto;
+}
+
+.project-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #1d4ed8;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.project-card__link::after {
+  content: '→';
+  font-size: 0.85rem;
+  transition: transform 0.2s ease;
+}
+
+.project-card__link:hover::after {
+  transform: translateX(2px);
 }
 
 .project-hero {
@@ -414,24 +477,22 @@
 }
 
 .task-card {
-  background: white;
+  background: linear-gradient(160deg, #ffffff 0%, #eef4ff 100%);
   border-radius: 0.9rem;
   padding: 1rem;
   box-shadow: 0 12px 22px rgba(15, 23, 42, 0.08);
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  border: 1px solid rgba(209, 220, 237, 0.9);
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
   cursor: pointer;
   width: 100%;
   text-align: left;
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  background-color: white;
 }
 
 .task-card:hover {
-  box-shadow: 0 16px 28px rgba(15, 23, 42, 0.12);
-  border-color: rgba(37, 99, 235, 0.45);
+  box-shadow: 0 18px 32px rgba(15, 23, 42, 0.14);
+  border-color: rgba(37, 99, 235, 0.35);
 }
 
 .task-column li {
