@@ -7,7 +7,7 @@ async function main(): Promise<void> {
   const password = process.env.SEED_USER_PASSWORD ?? 'Password123!';
   const passwordHash = await argon2.hash(password);
 
-  const user = await prisma.user.upsert({
+  const owner = await prisma.user.upsert({
     where: { email: 'founder@taskflow.dev' },
     update: {},
     create: {
@@ -18,6 +18,20 @@ async function main(): Promise<void> {
     },
   });
 
+  const collaboratorPassword = process.env.SEED_COLLABORATOR_PASSWORD ?? 'Password123!';
+  const collaboratorHash = await argon2.hash(collaboratorPassword);
+
+  const collaborator = await prisma.user.upsert({
+    where: { email: 'collaborator@taskflow.dev' },
+    update: {},
+    create: {
+      email: 'collaborator@taskflow.dev',
+      passwordHash: collaboratorHash,
+      displayName: 'Team Collaborator',
+      profileColor: '#9333ea',
+    },
+  });
+
   const project = await prisma.project.upsert({
     where: { id: '11111111-1111-1111-1111-111111111111' },
     update: {},
@@ -25,14 +39,14 @@ async function main(): Promise<void> {
       id: '11111111-1111-1111-1111-111111111111',
       name: 'TaskFlow Demo Workspace',
       description: 'Sample project seeded for local development.',
-      ownerId: user.id,
+      ownerId: owner.id,
     },
   });
 
   await prisma.membership.upsert({
     where: {
       userId_projectId: {
-        userId: user.id,
+        userId: owner.id,
         projectId: project.id,
       },
     },
@@ -40,9 +54,27 @@ async function main(): Promise<void> {
       role: MembershipRole.OWNER,
     },
     create: {
-      userId: user.id,
+      userId: owner.id,
       projectId: project.id,
       role: MembershipRole.OWNER,
+    },
+  });
+
+  const collaboratorMembership = await prisma.membership.upsert({
+    where: {
+      userId_projectId: {
+        userId: collaborator.id,
+        projectId: project.id,
+      },
+    },
+    update: {
+      role: MembershipRole.ADMIN,
+    },
+    create: {
+      userId: collaborator.id,
+      projectId: project.id,
+      role: MembershipRole.ADMIN,
+      invitedById: owner.id,
     },
   });
 
@@ -80,7 +112,7 @@ async function main(): Promise<void> {
       },
       create: {
         projectId: project.id,
-        createdById: user.id,
+        createdById: owner.id,
         id,
         ...taskData,
         position: index,
@@ -88,13 +120,31 @@ async function main(): Promise<void> {
     });
   }
 
+  await prisma.task.upsert({
+    where: { id: '44444444-4444-4444-4444-444444444443' },
+    update: {},
+    create: {
+      id: '44444444-4444-4444-4444-444444444443',
+      projectId: project.id,
+      createdById: collaborator.id,
+      assigneeId: collaboratorMembership.id,
+      title: 'Draft team onboarding doc',
+      description: 'Summarise how new teammates can start working in TaskFlow.',
+      priority: TaskPriority.HIGH,
+      status: TaskStatus.IN_REVIEW,
+      position: tasks.length,
+    },
+  });
+
   await prisma.authToken.deleteMany({
-    where: { userId: user.id },
+    where: { userId: owner.id },
   });
 
   console.log('Seed complete');
-  console.log(`Seed user email: ${user.email}`);
+  console.log(`Seed owner email: ${owner.email}`);
   console.log(`Seed user password: ${password}`);
+  console.log(`Seed collaborator email: ${collaborator.email}`);
+  console.log(`Seed collaborator password: ${collaboratorPassword}`);
 }
 
 void main()

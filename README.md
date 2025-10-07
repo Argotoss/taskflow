@@ -23,6 +23,15 @@ Seed user credentials:
 
 - Email: `founder@taskflow.dev`
 - Password: `Password123!` (override with `SEED_USER_PASSWORD` when seeding)
+- Collaborator email: `collaborator@taskflow.dev` (password `Password123!` or `SEED_COLLABORATOR_PASSWORD`)
+
+### Local Demo Workflow
+
+1. Log into the frontend with the founder account to explore owner permissions.
+2. Create a new project via the “New project” button (modal includes optional description).
+3. Open an existing project and add tasks with the “New task” modal (set status/priority, assign to members, add due dates).
+4. Switch to the collaborator account to verify admin-level access and shared task visibility.
+5. Seeded data includes kanban columns populated with sample tasks so the UI renders immediately.
 
 ## Running the Apps
 
