@@ -56,12 +56,6 @@
   background-color: rgba(148, 163, 184, 0.15);
 }
 
-.active-link,
-.nav-link--active {
-  background-color: rgba(29, 78, 216, 0.1);
-  color: #1d4ed8;
-}
-
 .brand {
   font-size: 1.25rem;
   font-weight: 700;
@@ -537,6 +531,13 @@
   gap: 0.85rem;
 }
 
+.theme-dark .task-column {
+  background: rgba(12, 19, 36, 0.92);
+  border-color: rgba(59, 130, 246, 0.18);
+  box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.12);
+  color: #d1ddff;
+}
+
 .task-column header {
   display: flex;
   align-items: center;
@@ -795,7 +796,7 @@
 }
 
 .theme-dark .task-column li .muted {
-  color: #6e7b96;
+  color: #9aa6c3;
 }
 
 .theme-dark .task-card {
@@ -1028,27 +1029,41 @@
   color: #475569;
 }
 
-.app-nav .nav-link--active {
-  background: rgba(59, 130, 246, 0.18);
+.app-nav .nav-link--highlight {
+  background: rgba(37, 99, 235, 0.18);
   color: #1d4ed8;
-  box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.2);
+  box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.22);
 }
 
-.app-nav .nav-link--active:not(:hover) {
+.app-nav .nav-link--highlight:hover {
+  background: rgba(37, 99, 235, 0.24);
+  color: #1d4ed8;
+}
+
+.app-nav .nav-link--muted {
+  color: #64748b;
+  background: transparent;
   cursor: default;
-  opacity: 0.9;
+  pointer-events: none;
+  opacity: 0.75;
+  box-shadow: none;
 }
 
 .theme-dark .app-nav .nav-link {
   color: #9aa6c3;
 }
 
-.theme-dark .app-nav .nav-link--active {
-  background: rgba(59, 130, 246, 0.35);
+.theme-dark .app-nav .nav-link--highlight {
+  background: rgba(96, 165, 250, 0.35);
   color: #e0e7ff;
-  box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.5);
+  box-shadow: inset 0 0 0 1px rgba(37, 99, 235, 0.45);
 }
 
-.theme-dark .app-nav .nav-link--active:not(:hover) {
-  opacity: 1;
+.theme-dark .app-nav .nav-link--highlight:hover {
+  background: rgba(96, 165, 250, 0.45);
+}
+
+.theme-dark .app-nav .nav-link--muted {
+  color: #56627c;
+  opacity: 0.7;
 }

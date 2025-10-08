@@ -1,4 +1,4 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 
 import { useAuth } from '../features/auth';
 import { useTheme } from '../features/theme';
@@ -12,6 +12,9 @@ type AppLayoutProps = {
 export const AppLayout = ({ title, actions, children }: AppLayoutProps): JSX.Element => {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const location = useLocation();
+  const isProjectsRoot = location.pathname === '/projects';
+  const isProjectsContext = location.pathname.startsWith('/projects');
 
   return (
     <div className="app-shell">
@@ -24,7 +27,14 @@ export const AppLayout = ({ title, actions, children }: AppLayoutProps): JSX.Ele
             <NavLink
               to="/projects"
               end
-              className={({ isActive }) => (isActive ? 'nav-link nav-link--active' : 'nav-link')}
+              className={
+                isProjectsRoot
+                  ? 'nav-link nav-link--muted'
+                  : isProjectsContext
+                    ? 'nav-link nav-link--highlight'
+                    : 'nav-link'
+              }
+              aria-current={isProjectsRoot ? 'page' : undefined}
             >
               Projects
             </NavLink>
