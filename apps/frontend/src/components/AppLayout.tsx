@@ -1,6 +1,7 @@
 import { Link, NavLink } from 'react-router-dom';
 
 import { useAuth } from '../features/auth';
+import { useTheme } from '../features/theme';
 
 type AppLayoutProps = {
   title?: string;
@@ -10,6 +11,7 @@ type AppLayoutProps = {
 
 export const AppLayout = ({ title, actions, children }: AppLayoutProps): JSX.Element => {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <div className="app-shell">
@@ -25,6 +27,14 @@ export const AppLayout = ({ title, actions, children }: AppLayoutProps): JSX.Ele
           </nav>
         </div>
         <div className="app-header__right">
+          <button
+            type="button"
+            className="theme-toggle"
+            onClick={toggleTheme}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+          >
+            <span aria-hidden>{theme === 'dark' ? '🌙' : '☀️'}</span>
+          </button>
           {user ? (
             <div className="user-pill">
               <span

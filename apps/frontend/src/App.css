@@ -72,6 +72,25 @@
   gap: 1rem;
 }
 
+.theme-toggle {
+  border: none;
+  background: rgba(29, 78, 216, 0.1);
+  color: #1d4ed8;
+  border-radius: 999px;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: grid;
+  place-items: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background: rgba(29, 78, 216, 0.18);
+  transform: translateY(-1px);
+}
+
 .user-pill {
   display: flex;
   align-items: center;
@@ -272,6 +291,15 @@
 .primary-button:not(:disabled):hover {
   transform: translateY(-1px);
   box-shadow: 0 12px 20px rgba(37, 99, 235, 0.22);
+}
+
+.theme-dark .primary-button {
+  background: linear-gradient(135deg, #2563eb, #1e3a8a);
+  color: #f8fafc;
+}
+
+.theme-dark .primary-button:not(:disabled):hover {
+  box-shadow: 0 12px 24px rgba(59, 130, 246, 0.35);
 }
 
 .secondary-button {
@@ -581,6 +609,30 @@
   transform: scale(0.98);
 }
 
+.theme-dark .task-card::before {
+  background: rgba(59, 130, 246, 0.6);
+}
+
+.theme-dark .task-card--backlog::before {
+  background: rgba(148, 163, 184, 0.55);
+}
+
+.theme-dark .task-card--in_progress::before {
+  background: rgba(96, 165, 250, 0.75);
+}
+
+.theme-dark .task-card--in_review::before {
+  background: rgba(168, 85, 247, 0.75);
+}
+
+.theme-dark .task-card--blocked::before {
+  background: rgba(248, 113, 113, 0.75);
+}
+
+.theme-dark .task-card--done::before {
+  background: rgba(34, 197, 94, 0.7);
+}
+
 .task-card h3 {
   font-size: 1rem;
   font-weight: 600;
@@ -600,6 +652,191 @@
   background: rgba(59, 130, 246, 0.08);
   border-radius: 1rem;
   transition: background 0.2s ease;
+}
+
+/* Dark theme overrides */
+.theme-dark .app-shell {
+  background: linear-gradient(180deg, #0c1322 0%, #131d33 100%);
+  color: #e2e8f0;
+}
+
+.theme-dark .app-header {
+  background: rgba(13, 20, 35, 0.85);
+  border-bottom: 1px solid rgba(59, 130, 246, 0.24);
+}
+
+.theme-dark .app-header nav a {
+  color: #9aa6c3;
+}
+
+.theme-dark .app-header nav a:hover {
+  background-color: rgba(59, 130, 246, 0.2);
+  color: #e0e7ff;
+}
+
+.theme-dark .active-link {
+  background-color: rgba(59, 130, 246, 0.3);
+  color: #bfdbfe;
+}
+
+.theme-dark .brand {
+  color: #8ab4ff;
+}
+
+.theme-dark .theme-toggle {
+  background: rgba(59, 130, 246, 0.25);
+  color: #dbeafe;
+}
+
+.theme-dark .theme-toggle:hover {
+  background: rgba(59, 130, 246, 0.35);
+}
+
+.theme-dark .user-pill {
+  background: #1b2237;
+  border-color: rgba(59, 130, 246, 0.35);
+  box-shadow: 0 6px 18px rgba(8, 12, 24, 0.55);
+}
+
+.theme-dark .user-pill__name {
+  color: #f8fafc;
+}
+
+.theme-dark .link-button {
+  color: #93c5fd;
+}
+
+.theme-dark .page-heading h1 {
+  color: #f8fafc;
+}
+
+.theme-dark .panel {
+  background: rgba(15, 23, 42, 0.85);
+  color: #cbd5f5;
+  border-color: rgba(59, 130, 246, 0.18);
+}
+
+.theme-dark .project-card {
+  background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(17, 23, 32, 0.95));
+  border-color: rgba(59, 130, 246, 0.25);
+  box-shadow: 0 24px 40px rgba(8, 12, 24, 0.55);
+}
+
+.theme-dark .project-card__body h2 {
+  color: #f9fbff;
+}
+
+.theme-dark .project-card__body p {
+  color: #c7d2fe;
+}
+
+.theme-dark .project-card__chip {
+  background: rgba(99, 102, 241, 0.35);
+  color: #ede9fe;
+}
+
+.theme-dark .project-card__meta {
+  color: #a3b1d9;
+}
+
+.theme-dark .project-card__meta-label strong {
+  color: #f1f5f9;
+}
+
+.theme-dark .project-card__link {
+  color: #bfdbfe;
+}
+
+.theme-dark .project-badge {
+  background: linear-gradient(140deg, rgba(37, 99, 235, 0.25), rgba(3, 7, 18, 0.75));
+  border-color: rgba(59, 130, 246, 0.32);
+  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.2);
+}
+
+.theme-dark .project-badge__body p {
+  color: #e2e8f0;
+}
+
+.theme-dark .project-badge__role {
+  background: rgba(99, 102, 241, 0.4);
+  color: #ede9fe;
+}
+
+.theme-dark .project-badge__status {
+  background: rgba(59, 130, 246, 0.3);
+  color: #bfdbfe;
+}
+
+.theme-dark .project-badge__status--active {
+  background: rgba(34, 197, 94, 0.35);
+  color: #bbf7d0;
+}
+
+.theme-dark .project-badge__status--draft {
+  background: rgba(148, 163, 184, 0.35);
+  color: #e2e8f0;
+}
+
+.theme-dark .project-badge__status--archived {
+  background: rgba(168, 85, 247, 0.35);
+  color: #ddd6fe;
+}
+
+.theme-dark .task-column--active {
+  background: rgba(59, 130, 246, 0.16);
+}
+
+.theme-dark .task-card {
+  background: linear-gradient(160deg, rgba(30, 41, 59, 0.95), rgba(17, 24, 39, 0.95));
+  border-color: rgba(59, 130, 246, 0.25);
+  box-shadow: 0 24px 38px rgba(8, 12, 24, 0.55);
+}
+
+.theme-dark .task-card h3 {
+  color: #f8fafc;
+}
+
+.theme-dark .task-card p {
+  color: #cbd5f5;
+}
+
+.theme-dark .task-card footer {
+  color: #94a3b8;
+}
+
+.theme-dark .secondary-button {
+  background: rgba(15, 23, 42, 0.8);
+  color: #e2e8f0;
+  border-color: rgba(148, 163, 184, 0.35);
+}
+
+.theme-dark .secondary-button:hover {
+  background: rgba(30, 41, 59, 0.85);
+}
+
+.theme-dark .modal {
+  background: linear-gradient(160deg, #0f172a, #111827);
+  border-color: rgba(59, 130, 246, 0.25);
+  color: #e2e8f0;
+  box-shadow: 0 26px 44px rgba(8, 12, 24, 0.65);
+}
+
+.theme-dark .modal__form input,
+.theme-dark .modal__form textarea,
+.theme-dark .modal__form select {
+  background: rgba(15, 23, 42, 0.75);
+  border-color: rgba(59, 130, 246, 0.25);
+  color: #e2e8f0;
+}
+
+.theme-dark .modal__form input:focus,
+.theme-dark .modal__form textarea:focus,
+.theme-dark .modal__form select:focus {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.theme-dark .muted {
+  color: #a8b3cf;
 }
 
 .task-card h3 {
