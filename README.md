@@ -99,3 +99,5 @@ The UI flow covers: secure auth, workspace switcher, drag-and-drop kanban update
 
 - Local S3-compatible storage is provided through MinIO (exposed on `http://localhost:9000`).
 - Update the `.env` files with production-ready secrets before deploying.
+- Contribution workflow lives in `CONTRIBUTING.md`; follow it for branch naming, testing, and PR expectations.
+- Project is released under the MIT License (`LICENSE`).
