@@ -1,0 +1,30 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1f2937" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="panel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#111827" />
+      <stop offset="100%" stop-color="#1f2937" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)" rx="32" />
+  <rect x="700" y="120" width="380" height="560" fill="url(#panel)" rx="24" stroke="#3b82f6" stroke-width="2" />
+  <text x="110" y="200" fill="#f8fafc" font-family="'Inter', sans-serif" font-size="64" font-weight="600">TaskFlow</text>
+  <text x="110" y="260" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="28">Collaborative task management that feels fast.</text>
+  <rect x="110" y="320" width="380" height="200" fill="rgba(15,23,42,0.6)" rx="24" />
+  <text x="140" y="380" fill="#cbd5f5" font-family="'Inter', sans-serif" font-size="22" font-weight="500">Kanban views</text>
+  <text x="140" y="420" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="18">Drag tasks, assign members, track progress.</text>
+  <rect x="140" y="450" width="210" height="6" fill="#3b82f6" rx="3" />
+  <text x="740" y="200" fill="#e2e8f0" font-family="'Inter', sans-serif" font-size="32" font-weight="600">Welcome back</text>
+  <text x="740" y="245" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="18">Sign in to manage your workspaces.</text>
+  <rect x="740" y="280" width="300" height="54" fill="#0f172a" rx="14" stroke="#1e293b" />
+  <text x="760" y="312" fill="#64748b" font-family="'Inter', sans-serif" font-size="16">Email address</text>
+  <rect x="740" y="360" width="300" height="54" fill="#0f172a" rx="14" stroke="#1e293b" />
+  <text x="760" y="392" fill="#64748b" font-family="'Inter', sans-serif" font-size="16">Password</text>
+  <rect x="740" y="440" width="300" height="56" fill="#3b82f6" rx="18" />
+  <text x="840" y="476" fill="#f8fafc" font-family="'Inter', sans-serif" font-size="20" font-weight="600">Sign in</text>
+  <text x="740" y="520" fill="#94a3b8" font-family="'Inter', sans-serif" font-size="16">JWT auth · Refresh rotation · RBAC</text>
+  <text x="740" y="560" fill="#3b82f6" font-family="'Inter', sans-serif" font-size="16" font-weight="600">Need an account? Create one</text>
+</svg>

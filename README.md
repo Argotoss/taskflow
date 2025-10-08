@@ -49,6 +49,14 @@ Seed user credentials:
 - NestJS layers Prisma over PostgreSQL and streams file uploads to S3-compatible storage (MinIO locally, AWS S3 in production).
 - GitHub Actions enforces linting, type checks, migrations, and tests before deploys.
 
+## Product Tour
+
+| Login                                         | Kanban workspace                                      |
+| --------------------------------------------- | ----------------------------------------------------- |
+| ![TaskFlow login](docs/screenshots/login.svg) | ![TaskFlow kanban board](docs/screenshots/kanban.svg) |
+
+The UI flow covers: secure auth, workspace switcher, drag-and-drop kanban updates, and inline task role assignments.
+
 ## API Documentation
 
 - Local Swagger UI runs at `http://localhost:3000/api/docs` while the backend is running.
@@ -62,6 +70,10 @@ Seed user credentials:
 - Per-project role checks run through a Nest guard that enforces owner/admin/contributor/viewer access before controller logic executes.
 - CORS is opt-in for the configured frontend origin only, and Prisma connections defer in tests so the code can boot without a live database.
 - Environment variables are cataloged in `docs/environment.md` to simplify hardening by environment.
+
+## Deployment Guide
+
+- `docs/deployment.md` outlines both an AWS-ready path (ECS + RDS + S3 + CloudFront) and a rapid managed-platform option (Render/Railway + Cloudflare Pages). Each includes CI/CD hooks and smoke-test steps post deploy.
 
 ## API Surface
 

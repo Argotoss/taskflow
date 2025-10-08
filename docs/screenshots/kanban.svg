@@ -1,0 +1,75 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc" />
+      <stop offset="100%" stop-color="#e0f2fe" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#94a3b8" flood-opacity="0.35" />
+    </filter>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)" rx="32" />
+  <text x="80" y="120" fill="#0f172a" font-family="'Inter', sans-serif" font-size="48" font-weight="600">Marketing Launch</text>
+  <text x="80" y="160" fill="#475569" font-family="'Inter', sans-serif" font-size="18">Owner: founder@taskflow.dev · 7 active members</text>
+  <g transform="translate(80,200)" filter="url(#shadow)">
+    <rect width="940" height="480" fill="#ffffff" rx="24" />
+    <g transform="translate(40,40)">
+      <rect width="220" height="400" fill="#f8fafc" rx="18" />
+      <text x="12" y="28" fill="#1e293b" font-family="'Inter', sans-serif" font-size="20" font-weight="600">Backlog</text>
+      <g transform="translate(12,52)">
+        <rect width="196" height="86" fill="#fff" rx="16" stroke="#cbd5f5" stroke-width="1" />
+        <text x="16" y="32" fill="#1e293b" font-family="'Inter', sans-serif" font-size="18" font-weight="600">Define success metrics</text>
+        <text x="16" y="58" fill="#64748b" font-family="'Inter', sans-serif" font-size="14">Owner · High priority</text>
+      </g>
+      <g transform="translate(12,154)">
+        <rect width="196" height="86" fill="#fff" rx="16" stroke="#cbd5f5" stroke-width="1" />
+        <text x="16" y="32" fill="#1e293b" font-family="'Inter', sans-serif" font-size="18" font-weight="600">Partner outreach list</text>
+        <text x="16" y="58" fill="#64748b" font-family="'Inter', sans-serif" font-size="14">Contributor · Medium</text>
+      </g>
+    </g>
+    <g transform="translate(300,40)">
+      <rect width="220" height="400" fill="#f1f5f9" rx="18" />
+      <text x="12" y="28" fill="#1e293b" font-family="'Inter', sans-serif" font-size="20" font-weight="600">In progress</text>
+      <g transform="translate(12,52)">
+        <rect width="196" height="110" fill="#fff" rx="16" stroke="#e2e8f0" stroke-width="1" />
+        <text x="16" y="32" fill="#1e293b" font-family="'Inter', sans-serif" font-size="18" font-weight="600">Landing page revamp</text>
+        <text x="16" y="58" fill="#64748b" font-family="'Inter', sans-serif" font-size="14">Contributor · Due Fri</text>
+        <rect x="16" y="70" width="92" height="18" rx="9" fill="#3b82f6" />
+        <text x="33" y="84" fill="#eff6ff" font-family="'Inter', sans-serif" font-size="12">UI Polish</text>
+      </g>
+      <g transform="translate(12,184)">
+        <rect width="196" height="86" fill="#fff" rx="16" stroke="#e2e8f0" stroke-width="1" />
+        <text x="16" y="32" fill="#1e293b" font-family="'Inter', sans-serif" font-size="18" font-weight="600">Press kit draft</text>
+        <text x="16" y="58" fill="#64748b" font-family="'Inter', sans-serif" font-size="14">Viewer · Review</text>
+      </g>
+    </g>
+    <g transform="translate(520,40)">
+      <rect width="220" height="400" fill="#ecfdf5" rx="18" />
+      <text x="12" y="28" fill="#047857" font-family="'Inter', sans-serif" font-size="20" font-weight="600">In review</text>
+      <g transform="translate(12,52)">
+        <rect width="196" height="86" fill="#fff" rx="16" stroke="#d1fae5" stroke-width="1" />
+        <text x="16" y="32" fill="#065f46" font-family="'Inter', sans-serif" font-size="18" font-weight="600">Email nurture flow</text>
+        <text x="16" y="58" fill="#10b981" font-family="'Inter', sans-serif" font-size="14">Admin review</text>
+      </g>
+      <g transform="translate(12,154)">
+        <rect width="196" height="86" fill="#fff" rx="16" stroke="#d1fae5" stroke-width="1" />
+        <text x="16" y="32" fill="#065f46" font-family="'Inter', sans-serif" font-size="18" font-weight="600">Beta onboarding loop</text>
+        <text x="16" y="58" fill="#10b981" font-family="'Inter', sans-serif" font-size="14">Owner sign-off</text>
+      </g>
+    </g>
+    <g transform="translate(740,40)">
+      <rect width="220" height="400" fill="#eef2ff" rx="18" />
+      <text x="12" y="28" fill="#3730a3" font-family="'Inter', sans-serif" font-size="20" font-weight="600">Done</text>
+      <g transform="translate(12,52)">
+        <rect width="196" height="86" fill="#fff" rx="16" stroke="#c7d2fe" stroke-width="1" />
+        <text x="16" y="32" fill="#312e81" font-family="'Inter', sans-serif" font-size="18" font-weight="600">Launch brief</text>
+        <text x="16" y="58" fill="#6366f1" font-family="'Inter', sans-serif" font-size="14">Completed yesterday</text>
+      </g>
+      <g transform="translate(12,154)">
+        <rect width="196" height="86" fill="#fff" rx="16" stroke="#c7d2fe" stroke-width="1" />
+        <text x="16" y="32" fill="#312e81" font-family="'Inter', sans-serif" font-size="18" font-weight="600">Budget approved</text>
+        <text x="16" y="58" fill="#6366f1" font-family="'Inter', sans-serif" font-size="14">Finance team</text>
+      </g>
+    </g>
+  </g>
+</svg>
