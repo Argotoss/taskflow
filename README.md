@@ -20,6 +20,7 @@ Collaborative task management platform built with a NestJS + Prisma backend and 
 4. Generate the Prisma client: `pnpm db:generate`
 5. Apply database migrations: `pnpm db:migrate`
 6. Seed development data (creates a demo workspace and user): `pnpm db:seed`
+7. Review `docs/environment.md` for configuration details before deploying.
 
 Seed user credentials:
 
@@ -40,6 +41,14 @@ Seed user credentials:
 - Backend API: `pnpm dev:backend` (serves on `http://localhost:3000/api`)
 - Frontend app: `pnpm dev:frontend` (serves on `http://localhost:5173`)
 
+## Architecture
+
+![TaskFlow architecture diagram](docs/architecture.png)
+
+- React SPA served from static hosting calls the NestJS API over HTTPS.
+- NestJS layers Prisma over PostgreSQL and streams file uploads to S3-compatible storage (MinIO locally, AWS S3 in production).
+- GitHub Actions enforces linting, type checks, migrations, and tests before deploys.
+
 ## API Documentation
 
 - Local Swagger UI runs at `http://localhost:3000/api/docs` while the backend is running.
@@ -52,6 +61,7 @@ Seed user credentials:
 - JWT access tokens (15 min) + refresh tokens (7 days) back REST endpoints via the `Authorization: Bearer` header, with Swagger documenting the requirement.
 - Per-project role checks run through a Nest guard that enforces owner/admin/contributor/viewer access before controller logic executes.
 - CORS is opt-in for the configured frontend origin only, and Prisma connections defer in tests so the code can boot without a live database.
+- Environment variables are cataloged in `docs/environment.md` to simplify hardening by environment.
 
 ## API Surface
 

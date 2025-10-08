@@ -1,0 +1,33 @@
+flowchart TB
+    subgraph Client
+        Browser["Browser\nReact SPA"]
+    end
+
+    subgraph Platform
+        Frontend["Vite + React\nStatic Hosting"]
+        Backend["NestJS API"]
+    end
+
+    subgraph Data
+        Postgres[("PostgreSQL")]
+        Storage["S3 / MinIO\nObject Storage"]
+    end
+
+    subgraph Automation
+        CI["GitHub Actions\nCI Pipeline"]
+    end
+
+    Browser -->|HTTPS| Frontend
+    Frontend -->|REST| Backend
+    Backend -->|Prisma| Postgres
+    Backend -->|File Uploads| Storage
+
+    CI -->|pnpm lint / test / build| Backend
+    CI -->|pnpm lint / test / build| Frontend
+
+    subgraph Local Dev
+        Compose["Docker Compose\n(Postgres + MinIO)"]
+    end
+
+    Compose --> Backend
+    Compose --> Storage
