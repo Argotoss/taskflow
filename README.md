@@ -46,6 +46,13 @@ Seed user credentials:
 - A committed snapshot lives at `docs/openapi.json`; load it in Swagger UI (e.g. https://editor.swagger.io via File → Import URL with the raw file URL) to explore the API without cloning or booting the app.
 - Regenerate the snapshot after API changes with `pnpm docs:openapi`.
 
+## Security Model
+
+- Passwords and refresh tokens are hashed with Argon2 before hitting the database; refresh tokens are single-use and rotated on every login/refresh.
+- JWT access tokens (15 min) + refresh tokens (7 days) back REST endpoints via the `Authorization: Bearer` header, with Swagger documenting the requirement.
+- Per-project role checks run through a Nest guard that enforces owner/admin/contributor/viewer access before controller logic executes.
+- CORS is opt-in for the configured frontend origin only, and Prisma connections defer in tests so the code can boot without a live database.
+
 ## API Surface
 
 - `POST /api/auth/register|login|refresh` – user authentication lifecycle.
