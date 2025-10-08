@@ -1,0 +1,23 @@
+[[services]]
+name = "backend"
+install = [
+  "npm install -g pnpm@9",
+  "pnpm install --frozen-lockfile"
+]
+build = [
+  "pnpm --filter shared build",
+  "pnpm --filter backend build"
+]
+start = "pnpm --filter backend start"
+
+[[services]]
+name = "frontend"
+install = [
+  "npm install -g pnpm@9",
+  "pnpm install --frozen-lockfile"
+]
+build = [
+  "pnpm --filter shared build",
+  "pnpm --filter frontend build"
+]
+start = "pnpm --filter frontend preview -- --host 0.0.0.0 --port 4173"
