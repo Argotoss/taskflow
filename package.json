@@ -22,7 +22,8 @@
     "dev:backend": "pnpm --filter backend start:dev",
     "dev:frontend": "pnpm --filter frontend dev",
     "test:frontend": "pnpm --filter frontend test",
-    "test:backend:e2e": "pnpm --filter backend test:e2e"
+    "test:backend:e2e": "pnpm --filter backend test:e2e",
+    "docs:openapi": "pnpm --filter backend exec ts-node --transpile-only scripts/generate-openapi.ts"
   },
   "devDependencies": {
     "husky": "^9.1.7",

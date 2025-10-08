@@ -1,5 +1,7 @@
 # TaskFlow
 
+[![CI](https://github.com/Argotoss/taskflow/actions/workflows/ci.yml/badge.svg)](https://github.com/Argotoss/taskflow/actions/workflows/ci.yml)
+
 Collaborative task management platform built with a NestJS + Prisma backend and a Vite + React frontend.
 
 ## Requirements
@@ -38,7 +40,11 @@ Seed user credentials:
 - Backend API: `pnpm dev:backend` (serves on `http://localhost:3000/api`)
 - Frontend app: `pnpm dev:frontend` (serves on `http://localhost:5173`)
 
-API documentation is available locally at `http://localhost:3000/api/docs` once the backend is running.
+## API Documentation
+
+- Local Swagger UI runs at `http://localhost:3000/api/docs` while the backend is running.
+- A committed snapshot lives at `docs/openapi.json`; load it in Swagger UI (e.g. https://editor.swagger.io via File → Import URL with the raw file URL) to explore the API without cloning or booting the app.
+- Regenerate the snapshot after API changes with `pnpm docs:openapi`.
 
 ## API Surface
 
@@ -58,6 +64,7 @@ API documentation is available locally at `http://localhost:3000/api/docs` once 
 - Lint: `pnpm lint`
 - Unit tests: `pnpm test`
 - Type checks: `pnpm typecheck`
+- Continuous integration: GitHub Actions runs lint, type checks, database migrations, and tests on every push/PR via `.github/workflows/ci.yml`.
 
 ## Tooling Notes
 
