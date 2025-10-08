@@ -38,6 +38,8 @@ Seed user credentials:
 - Backend API: `pnpm dev:backend` (serves on `http://localhost:3000/api`)
 - Frontend app: `pnpm dev:frontend` (serves on `http://localhost:5173`)
 
+API documentation is available locally at `http://localhost:3000/api/docs` once the backend is running.
+
 ## API Surface
 
 - `POST /api/auth/register|login|refresh` – user authentication lifecycle.

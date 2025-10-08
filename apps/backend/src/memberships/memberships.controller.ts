@@ -9,6 +9,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { MembershipRole } from '@prisma/client';
 
 import { AddMemberDto } from './dto/add-member.dto';
@@ -20,6 +21,8 @@ import { AuthenticatedRequest } from '../common/types/authenticated-request';
 import { ProjectAccess } from '../projects/decorators/project-access.decorator';
 import { ProjectAccessGuard } from '../projects/guards/project-access.guard';
 
+@ApiTags('memberships')
+@ApiBearerAuth()
 @Controller('projects/:projectId/memberships')
 @UseGuards(JwtAuthGuard, ProjectAccessGuard)
 export class MembershipsController {

@@ -10,6 +10,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { MembershipRole } from '@prisma/client';
 
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -22,6 +23,8 @@ import { AuthenticatedRequest } from '../common/types/authenticated-request';
 import { ProjectAccess } from '../projects/decorators/project-access.decorator';
 import { ProjectAccessGuard } from '../projects/guards/project-access.guard';
 
+@ApiTags('tasks')
+@ApiBearerAuth()
 @Controller('projects/:projectId/tasks')
 @UseGuards(JwtAuthGuard, ProjectAccessGuard)
 export class TasksController {

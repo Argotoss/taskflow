@@ -9,6 +9,7 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 
 import { AuthService } from './auth.service';
@@ -20,6 +21,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { AuthenticatedRequest } from '../common/types/authenticated-request';
 import { PublicUser, UsersService } from '../users/users.service';
 
+@ApiTags('auth')
 @Controller({ path: 'auth' })
 export class AuthController {
   constructor(
@@ -49,6 +51,7 @@ export class AuthController {
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   async me(@Request() req: AuthenticatedRequest): Promise<PublicUser> {
     const userId = req.user.userId;
     const user = await this.usersService.findById(userId);

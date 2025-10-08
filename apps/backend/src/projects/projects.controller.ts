@@ -9,6 +9,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { MembershipRole } from '@prisma/client';
 
 import { ProjectAccess } from './decorators/project-access.decorator';
@@ -22,6 +23,8 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AuthenticatedRequest } from '../common/types/authenticated-request';
 import { ProjectRequest } from '../common/types/project-request';
 
+@ApiTags('projects')
+@ApiBearerAuth()
 @Controller('projects')
 @UseGuards(JwtAuthGuard)
 export class ProjectsController {
