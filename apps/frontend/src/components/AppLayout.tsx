@@ -20,8 +20,12 @@ export const AppLayout = ({ title, actions, children }: AppLayoutProps): JSX.Ele
           <Link to="/projects" className="brand">
             TaskFlow
           </Link>
-          <nav aria-label="Main navigation">
-            <NavLink to="/projects" className={({ isActive }) => (isActive ? 'active-link' : '')}>
+          <nav aria-label="Main navigation" className="app-nav">
+            <NavLink
+              to="/projects"
+              end
+              className={({ isActive }) => (isActive ? 'nav-link nav-link--active' : 'nav-link')}
+            >
               Projects
             </NavLink>
           </nav>
