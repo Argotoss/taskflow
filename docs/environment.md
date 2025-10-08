@@ -18,6 +18,7 @@ This project keeps runtime configuration in two `.env` files: one at the repo ro
 | `AWS_REGION`                 | Yes (object storage) | `eu-central-1`                                                         | Region passed to the S3 client.                                        |
 | `AWS_S3_BUCKET`              | Yes (object storage) | `taskflow-local`                                                       | Bucket storing attachments.                                            |
 | `AWS_S3_PUBLIC_URL`          | Yes (object storage) | `http://localhost:9000/taskflow-local`                                 | Base URL the frontend uses to render uploaded files.                   |
+| `AWS_S3_ENDPOINT`            | No                   | `http://localhost:9000`                                                | Custom endpoint for S3-compatible providers (MinIO, LocalStack).       |
 | `AWS_ACCESS_KEY_ID`          | Yes (object storage) | `taskflow`                                                             | Credentials for S3/MinIO access.                                       |
 | `AWS_SECRET_ACCESS_KEY`      | Yes (object storage) | `taskflow-secret`                                                      | Credentials for S3/MinIO access.                                       |
 | `SEED_USER_PASSWORD`         | No                   | `Password123!`                                                         | Seeded owner password; override in any shared environment.             |

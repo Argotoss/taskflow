@@ -92,6 +92,19 @@ export const taskAssigneeSchema = z.object({
   user: userSummarySchema,
 });
 
+export const attachmentSchema = z.object({
+  id: z.string().uuid(),
+  taskId: z.string().uuid(),
+  fileName: z.string().min(1),
+  fileSize: z.number().int().positive(),
+  contentType: z.string().min(1),
+  s3Key: z.string().min(1),
+  url: z.string().url().nullable(),
+  createdAt: isoDate(),
+  uploaderId: z.string().uuid(),
+  uploader: userSummarySchema,
+});
+
 export const taskSchema = z.object({
   id: z.string().uuid(),
   projectId: z.string().uuid(),
@@ -108,6 +121,7 @@ export const taskSchema = z.object({
   assigneeId: z.string().uuid().nullable().optional(),
   createdBy: userSummarySchema,
   assignee: taskAssigneeSchema.nullable().optional(),
+  attachments: z.array(attachmentSchema),
 });
 
 export const createTaskRequestSchema = z.object({
@@ -122,11 +136,33 @@ export const createTaskRequestSchema = z.object({
 
 export const updateTaskRequestSchema = createTaskRequestSchema.partial();
 
+export const presignAttachmentRequestSchema = z.object({
+  fileName: z.string().min(1).max(255),
+  contentType: z.string().min(1).max(255),
+  fileSize: z.number().int().positive(),
+});
+
+export const presignAttachmentResponseSchema = z.object({
+  key: z.string().min(1),
+  uploadUrl: z.string().url(),
+  headers: z.record(z.string()),
+  expiresIn: z.number().int().positive(),
+  url: z.string().url().nullable(),
+});
+
+export const createAttachmentRequestSchema = z.object({
+  fileName: z.string().min(1).max(255),
+  contentType: z.string().min(1).max(255),
+  fileSize: z.number().int().positive(),
+  s3Key: z.string().min(1),
+});
+
 export type UserSummary = z.infer<typeof userSummarySchema>;
 export type AuthResponse = z.infer<typeof authResponseSchema>;
 export type Project = z.infer<typeof projectSchema>;
 export type Membership = z.infer<typeof membershipSchema>;
 export type Task = z.infer<typeof taskSchema>;
+export type Attachment = z.infer<typeof attachmentSchema>;
 export type LoginRequest = z.infer<typeof loginRequestSchema>;
 export type RegisterRequest = z.infer<typeof registerRequestSchema>;
 export type RefreshTokenRequest = z.infer<typeof refreshTokenRequestSchema>;
@@ -136,5 +172,8 @@ export type AddMemberRequest = z.infer<typeof addMemberRequestSchema>;
 export type UpdateMemberRoleRequest = z.infer<typeof updateMemberRoleRequestSchema>;
 export type CreateTaskRequest = z.infer<typeof createTaskRequestSchema>;
 export type UpdateTaskRequest = z.infer<typeof updateTaskRequestSchema>;
+export type PresignAttachmentRequest = z.infer<typeof presignAttachmentRequestSchema>;
+export type PresignAttachmentResponse = z.infer<typeof presignAttachmentResponseSchema>;
+export type CreateAttachmentRequest = z.infer<typeof createAttachmentRequestSchema>;
 
 export const PASSWORD_REGEX = passwordRegex;

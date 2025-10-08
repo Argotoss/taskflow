@@ -1,11 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Task, UpdateTaskRequest, taskPriorityValues, taskStatusValues } from '@taskflow/shared';
-import { useMemo, useState } from 'react';
+import { ChangeEvent, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { useMembershipsQuery } from '../../memberships';
-import { useUpdateTaskMutation } from '../api';
+import {
+  useCreateAttachmentMutation,
+  usePresignAttachmentMutation,
+  useTaskAttachmentsQuery,
+  useUpdateTaskMutation,
+} from '../api';
 
 const schema = z.object({
   title: z.string().min(1, 'Title is required'),
@@ -26,10 +31,19 @@ type EditTaskModalProps = {
 
 export const EditTaskModal = ({ projectId, task, onClose }: EditTaskModalProps): JSX.Element => {
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const membershipsQuery = useMembershipsQuery(projectId);
   const mutation = useUpdateTaskMutation(projectId);
+  const attachmentsQuery = useTaskAttachmentsQuery(projectId, task.id);
+  const presignAttachment = usePresignAttachmentMutation(projectId, task.id);
+  const createAttachment = useCreateAttachmentMutation(projectId, task.id);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const members = useMemo(() => membershipsQuery.data ?? [], [membershipsQuery.data]);
+  const attachments = useMemo(
+    () => attachmentsQuery.data ?? task.attachments ?? [],
+    [attachmentsQuery.data, task.attachments],
+  );
 
   const {
     register,
@@ -67,6 +81,59 @@ export const EditTaskModal = ({ projectId, task, onClose }: EditTaskModalProps):
   };
 
   const isMembersLoading = membershipsQuery.isLoading;
+  const isUploading = presignAttachment.isPending || createAttachment.isPending;
+  const attachmentsLoading = attachmentsQuery.isLoading && !attachmentsQuery.data;
+  const attachmentsError = attachmentsQuery.isError ? 'Unable to load attachments.' : null;
+
+  const formatFileSize = (size: number): string => {
+    if (size < 1024) return `${size} B`;
+    if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
+    return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
+  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    try {
+      setUploadError(null);
+      const contentType = file.type || 'application/octet-stream';
+      const presign = await presignAttachment.mutateAsync({
+        fileName: file.name,
+        fileSize: file.size,
+        contentType,
+      });
+
+      const uploadResponse = await fetch(presign.uploadUrl, {
+        method: 'PUT',
+        headers: {
+          ...presign.headers,
+          'Content-Type': contentType,
+        },
+        body: file,
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error('Upload failed');
+      }
+
+      await createAttachment.mutateAsync({
+        fileName: file.name,
+        fileSize: file.size,
+        contentType,
+        s3Key: presign.key,
+      });
+    } catch (error) {
+      console.error(error);
+      setUploadError('Unable to upload file right now. Please try again.');
+    } finally {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
 
   return (
     <div className="modal-backdrop">
@@ -139,6 +206,61 @@ export const EditTaskModal = ({ projectId, task, onClose }: EditTaskModalProps):
               <input type="date" {...register('dueAt')} disabled={isSubmitting} />
             </label>
           </div>
+
+          <section className="attachments-section">
+            <div className="attachments-section__header">
+              <h3>Attachments</h3>
+              {isUploading ? <span className="chip">Uploading…</span> : null}
+            </div>
+            {attachmentsError ? <div className="form-error">{attachmentsError}</div> : null}
+            {attachmentsLoading ? (
+              <p className="muted">Loading attachments…</p>
+            ) : attachments.length === 0 ? (
+              <p className="muted">No files attached yet.</p>
+            ) : (
+              <ul className="attachments-list">
+                {attachments.map((attachment) => (
+                  <li key={attachment.id}>
+                    <div className="attachments-list__meta">
+                      <span className="attachments-list__name">
+                        {attachment.url ? (
+                          <a href={attachment.url} target="_blank" rel="noopener noreferrer">
+                            {attachment.fileName}
+                          </a>
+                        ) : (
+                          attachment.fileName
+                        )}
+                      </span>
+                      <small>
+                        {formatFileSize(attachment.fileSize)} · uploaded by{' '}
+                        {attachment.uploader.displayName}
+                      </small>
+                    </div>
+                    {attachment.url ? (
+                      <a
+                        className="link-button"
+                        href={attachment.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        View
+                      </a>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <label className="attachments-upload">
+              <span>Add file</span>
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                disabled={isUploading}
+              />
+            </label>
+            {uploadError ? <small className="form-error">{uploadError}</small> : null}
+          </section>
 
           <footer className="modal__actions">
             <button

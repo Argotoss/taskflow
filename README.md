@@ -55,7 +55,7 @@ Seed user credentials:
 | --------------------------------------------- | ----------------------------------------------------- |
 | ![TaskFlow login](docs/screenshots/login.svg) | ![TaskFlow kanban board](docs/screenshots/kanban.svg) |
 
-The UI flow covers: secure auth, workspace switcher, drag-and-drop kanban updates, and inline task role assignments.
+The UI flow covers: secure auth, workspace switcher, drag-and-drop kanban updates, inline task role assignments, and file attachments with presigned uploads.
 
 ## API Documentation
 

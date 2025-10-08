@@ -11,7 +11,7 @@ async function generate(): Promise<void> {
   const app = await NestFactory.create(AppModule);
   await app.init();
   const document = createSwaggerDocument(app);
-  const docsDir = path.resolve(process.cwd(), 'docs');
+  const docsDir = path.resolve(process.cwd(), '../..', 'docs');
   const outputPath = path.join(docsDir, 'openapi.json');
   mkdirSync(docsDir, { recursive: true });
 

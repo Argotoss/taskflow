@@ -1,9 +1,19 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Membership, Prisma, Task, TaskPriority, TaskStatus, User } from '@prisma/client';
+import {
+  Attachment,
+  Membership,
+  Prisma,
+  Task,
+  TaskPriority,
+  TaskStatus,
+  User,
+} from '@prisma/client';
 import { plainToInstance } from 'class-transformer';
 
 import { UserSummaryDto } from '../common/dto/user-summary.dto';
 import { PrismaService } from '../prisma/prisma.service';
+import { StorageService } from '../storage/storage.service';
+import { AttachmentResponseDto } from './dto/attachment-response.dto';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { ListTasksQueryDto } from './dto/list-tasks-query.dto';
 import { TaskAssigneeDto, TaskResponseDto } from './dto/task-response.dto';
@@ -11,7 +21,10 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 
 @Injectable()
 export class TasksService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly storage: StorageService,
+  ) {}
 
   async listTasks(projectId: string, filters: ListTasksQueryDto): Promise<TaskResponseDto[]> {
     const where: Prisma.TaskWhereInput = {
@@ -42,6 +55,10 @@ export class TasksService {
         createdBy: true,
         assignee: {
           include: { user: true },
+        },
+        attachments: {
+          include: { uploader: true },
+          orderBy: { createdAt: 'desc' },
         },
       },
       orderBy: [{ position: 'asc' }, { createdAt: 'asc' }],
@@ -78,6 +95,10 @@ export class TasksService {
         assignee: {
           include: { user: true },
         },
+        attachments: {
+          include: { uploader: true },
+          orderBy: { createdAt: 'desc' },
+        },
       },
     });
 
@@ -94,6 +115,10 @@ export class TasksService {
         createdBy: true,
         assignee: {
           include: { user: true },
+        },
+        attachments: {
+          include: { uploader: true },
+          orderBy: { createdAt: 'desc' },
         },
       },
     });
@@ -169,6 +194,10 @@ export class TasksService {
         assignee: {
           include: { user: true },
         },
+        attachments: {
+          include: { uploader: true },
+          orderBy: { createdAt: 'desc' },
+        },
       },
     });
 
@@ -221,6 +250,7 @@ export class TasksService {
     task: Task & {
       createdBy: User;
       assignee: (Membership & { user: User }) | null;
+      attachments: (Attachment & { uploader: User })[];
     },
   ): TaskResponseDto {
     return plainToInstance(
@@ -242,6 +272,19 @@ export class TasksService {
               { excludeExtraneousValues: true },
             )
           : null,
+        attachments: task.attachments.map((attachment) =>
+          plainToInstance(
+            AttachmentResponseDto,
+            {
+              ...attachment,
+              url: this.storage.getPublicUrl(attachment.s3Key),
+              uploader: plainToInstance(UserSummaryDto, attachment.uploader, {
+                excludeExtraneousValues: true,
+              }),
+            },
+            { excludeExtraneousValues: true },
+          ),
+        ),
       },
       { excludeExtraneousValues: true },
     );

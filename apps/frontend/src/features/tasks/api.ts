@@ -1,10 +1,17 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
+  Attachment,
+  CreateAttachmentRequest,
   CreateTaskRequest,
+  PresignAttachmentRequest,
   Task,
   TaskStatus,
   UpdateTaskRequest,
+  attachmentSchema,
+  createAttachmentRequestSchema,
   createTaskRequestSchema,
+  presignAttachmentRequestSchema,
+  presignAttachmentResponseSchema,
   taskSchema,
   updateTaskRequestSchema,
 } from '@taskflow/shared';
@@ -13,6 +20,7 @@ import { z } from 'zod';
 import { useAuth } from '../auth';
 
 const tasksSchema = z.array(taskSchema);
+const attachmentsSchema = z.array(attachmentSchema);
 
 type TaskFilters = {
   status?: TaskStatus;
@@ -25,6 +33,14 @@ export const tasksQueryKey = (projectId: string, filters?: TaskFilters) => [
   projectId,
   'tasks',
   filters ?? {},
+];
+
+const taskAttachmentsKey = (projectId: string, taskId: string) => [
+  'project',
+  projectId,
+  'tasks',
+  taskId,
+  'attachments',
 ];
 
 export const useProjectTasksQuery = (projectId?: string, filters?: TaskFilters) => {
@@ -86,6 +102,63 @@ export const useUpdateTaskMutation = (projectId: string) => {
       queryClient.invalidateQueries({ queryKey: tasksQueryKey(projectId) });
       queryClient.setQueryData(tasksQueryKey(projectId), (prev?: Task[]) =>
         prev ? prev.map((item) => (item.id === task.id ? task : item)) : prev,
+      );
+    },
+  });
+};
+
+export const useTaskAttachmentsQuery = (projectId?: string, taskId?: string) => {
+  const { request } = useAuth();
+
+  return useQuery({
+    queryKey: projectId && taskId ? taskAttachmentsKey(projectId, taskId) : ['attachments'],
+    enabled: Boolean(projectId && taskId),
+    queryFn: async () =>
+      request(
+        {
+          method: 'GET',
+          url: `/projects/${projectId}/tasks/${taskId}/attachments`,
+        },
+        attachmentsSchema,
+      ),
+  });
+};
+
+export const usePresignAttachmentMutation = (projectId: string, taskId: string) => {
+  const { request } = useAuth();
+
+  return useMutation({
+    mutationFn: async (input: PresignAttachmentRequest) =>
+      request(
+        {
+          method: 'POST',
+          url: `/projects/${projectId}/tasks/${taskId}/attachments/presign`,
+          data: presignAttachmentRequestSchema.parse(input),
+        },
+        presignAttachmentResponseSchema,
+      ),
+  });
+};
+
+export const useCreateAttachmentMutation = (projectId: string, taskId: string) => {
+  const { request } = useAuth();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (input: CreateAttachmentRequest) =>
+      request(
+        {
+          method: 'POST',
+          url: `/projects/${projectId}/tasks/${taskId}/attachments`,
+          data: createAttachmentRequestSchema.parse(input),
+        },
+        attachmentSchema,
+      ),
+    onSuccess: (attachment: Attachment) => {
+      queryClient.invalidateQueries({ queryKey: taskAttachmentsKey(projectId, taskId) });
+      queryClient.invalidateQueries({ queryKey: tasksQueryKey(projectId) });
+      queryClient.setQueryData(taskAttachmentsKey(projectId, taskId), (prev?: Attachment[]) =>
+        prev ? [attachment, ...prev.filter((item) => item.id !== attachment.id)] : [attachment],
       );
     },
   });
