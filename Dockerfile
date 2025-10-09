@@ -5,7 +5,7 @@ RUN corepack enable && corepack prepare pnpm@9.12.3 --activate
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY apps/backend/package.json apps/backend/pnpm-lock.yaml ./apps/backend/
+COPY apps/backend/package.json ./apps/backend/
 
 WORKDIR /app/apps/backend
 RUN pnpm install --frozen-lockfile
@@ -14,6 +14,7 @@ WORKDIR /app
 COPY . .
 
 WORKDIR /app/apps/backend
+RUN DATABASE_URL="postgresql://postgres:postgres@localhost:5432/postgres" pnpm exec prisma generate
 RUN pnpm build
 
 ENV NODE_ENV=production
