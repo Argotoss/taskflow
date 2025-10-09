@@ -1,6 +1,7 @@
 FROM node:22-alpine
 
 RUN corepack enable && corepack prepare pnpm@9.12.3 --activate
+RUN apk add --no-cache openssl1.1-compat
 
 WORKDIR /app
 
