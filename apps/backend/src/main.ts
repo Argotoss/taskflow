@@ -24,7 +24,7 @@ async function bootstrap(): Promise<void> {
 
   const port = process.env.PORT ? Number.parseInt(process.env.PORT, 10) : 3000;
 
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0');
   const logger = app.get(Logger);
   logger.log(`API running on port ${port}`, 'Bootstrap');
 }
