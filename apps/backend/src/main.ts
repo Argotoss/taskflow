@@ -29,4 +29,8 @@ async function bootstrap(): Promise<void> {
   logger.log(`API running on port ${port}`, 'Bootstrap');
 }
 
-void bootstrap();
+bootstrap().catch((error) => {
+  // eslint-disable-next-line no-console
+  console.error('Failed to bootstrap application', error);
+  process.exitCode = 1;
+});

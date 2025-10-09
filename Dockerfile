@@ -1,7 +1,7 @@
 FROM node:22-alpine
 
 RUN corepack enable && corepack prepare pnpm@9.12.3 --activate
-RUN apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/v3.18/community openssl1.1-compat
+RUN apk add --no-cache ca-certificates --repository=https://dl-cdn.alpinelinux.org/alpine/v3.18/community openssl1.1-compat
 
 WORKDIR /app
 
@@ -18,7 +18,6 @@ WORKDIR /app/apps/backend
 RUN DATABASE_URL="postgresql://postgres:postgres@localhost:5432/postgres" pnpm exec prisma generate
 RUN pnpm build
 
-ENV NODE_ENV=production
 ENV PORT=3000
 
 EXPOSE 3000
