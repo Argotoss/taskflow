@@ -23,4 +23,4 @@ ENV PORT=3000
 
 EXPOSE 3000
 
-CMD ["pnpm", "start"]
+CMD ["sh", "-c", "pnpm start || (sleep 30; exit 1)"]
